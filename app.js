@@ -114,12 +114,41 @@ function generatePassword(upper, lower, number, symbol, length) {
 generateEl.addEventListener(`click`, () => {
     // Changing value from a string to a number
     const length = parseInt(lengthEl.value);
-    
+
     // Checking if the following options/checkboxes are selected/checked and setting the returned true/false values to the respective variables
     const hasUpper = uppercaseEl.checked;
     const hasLower = lowercaseEl.checked;
     const hasNumber = numbersEl.checked;
     const hasSymbol = symbolsEl.checked;
 
-    console.log(hasUpper, hasLower, hasNumber, hasSymbol);
+    console.log(hasUpper, hasLower, hasNumber, hasSymbol, length);
+
+    // The generatePassword function takes the true/false values determined by the checkboxes as well as the number from the number input as arguments and returns a string (AKA The generated password) which is set as the value for the innerText property for the result element/span
+    resultEl.innerText = generatePassword(hasUpper, hasLower, hasNumber, hasSymbol, length);
+});
+
+// Copy password to clipboard
+clipboardEl.addEventListener(`click`, () => {
+    const textArea = document.createElement(`textarea`);
+    const password = resultEl.innerText;
+
+    // If user clicks clipboard while no password is displayed the function will end and nothing will be copied to the clipboard
+    if (password === "") {
+        alert(`Please generate a password first.`)
+        return;
+    }
+
+    // Setting the value for the textArea to the password that is currently being displayed
+    textArea.value = password;
+    // Selecting the body element
+    const body = document.querySelector(`body`);
+    // Adding the textarea to the webpage
+    body.append(textArea);
+    // Selecting the value insdie the textare
+    textArea.select();
+    // Copying the selected value
+    document.execCommand(`copy`);
+    // Removing the textarea element from the webpage/document
+    textArea.remove();
+    alert(`Password has been copied to the clipboard!`);
 });
